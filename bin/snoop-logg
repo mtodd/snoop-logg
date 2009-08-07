@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+
+# SnoopLogg command line interface script.
+# Run <tt>snoop-logg -h</tt> to get more usage.
+require File.dirname(__FILE__) + '/../lib/snoop_logg'
+ 
+SnoopLogg::Runner.run!(ARGV)
