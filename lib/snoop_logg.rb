@@ -7,6 +7,7 @@ require 'snoop_logg/logger'
 require 'snoop_logg/runner'
 
 require 'snoop_logg/proxy'
+require 'snoop_logg/log'
 
 require 'snoop_logg/server'
 require 'snoop_logg/client'

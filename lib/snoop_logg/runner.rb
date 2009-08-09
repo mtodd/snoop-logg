@@ -37,7 +37,6 @@ module SnoopLogg
         if self.options[:enable_client]
           # Start CLI Client
           EventMachine.open_keyboard(Client)
-          logger.debug "Now serving logs on 127.0.0.1:%i..." % self.options[:port]
         end
       end
     end

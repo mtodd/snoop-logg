@@ -13,7 +13,7 @@ module SnoopLogg
     
     def receive_data request
       # log request payload
-      logger.debug ">>>%s" % request.inspect
+      SnoopLogg.log << request.inspect
       self.destination.send_data request
     end
     
@@ -31,7 +31,7 @@ module SnoopLogg
       
       def receive_data response
         # log response payload
-        logger.debug "<<<%s" % response.inspect
+        SnoopLogg.log << response.inspect
         self.source.send_data response
       end
       
