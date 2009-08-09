@@ -1,10 +1,20 @@
-<table>
+<table width="100%" border="1">
   <tr>
+    <td width="100">Signature (Connection ID)</td>
+    <td width="100">Type</td>
     <td></td>
   </tr>
-  <% @logs.each do |log| %>
+  <% @entries.each do |(signature, type, data)| %>
     <tr>
-      <td><%= log.inspect %></td>
+      <td>
+        <%= signature_link(signature) %>
+      </td>
+      <td>
+        <%= type %>
+      </td>
+      <td>
+        <div class="data"><pre><code><%= format_for_display(data) %></code></pre></div>
+      </td>
     </tr>
   <% end %>
 </table>

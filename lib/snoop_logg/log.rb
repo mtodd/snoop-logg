@@ -1,5 +1,11 @@
 module SnoopLogg
   class Log < Array
-    # TODO: implement asynchronous persistence, random queries, etc
+    
+    def record(signature, type, data)
+      self << [signature, type, data]
+    end
+    
+    # TODO: develop asynchronous storage in PStore
+    
   end
 end

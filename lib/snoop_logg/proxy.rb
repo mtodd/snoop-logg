@@ -13,7 +13,7 @@ module SnoopLogg
     
     def receive_data request
       # log request payload
-      SnoopLogg.log << request.inspect
+      SnoopLogg.log.record @signature, :request, request
       self.destination.send_data request
     end
     
@@ -31,7 +31,7 @@ module SnoopLogg
       
       def receive_data response
         # log response payload
-        SnoopLogg.log << response.inspect
+        SnoopLogg.log.record @signature, :response, response
         self.source.send_data response
       end
       

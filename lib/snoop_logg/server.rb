@@ -36,23 +36,66 @@ module SnoopLogg
     def call
       case @http_path_info
       when %r{/}
-        [200, {}, list_logs]
-      when %r{/show/(\d+)}
-        [200, {}, show_log($1.to_i)]
+        [200, {}, all_entries]
+      when %r{/(\d+)}
+        [200, {}, show_entry($1.to_i)]
+      when %r{/signatures/(.+)}
+        [200, {}, show_entries_for_signature($1.to_s)]
       else
         [404, {}, "Not Found"]
       end
     end
     
-    def list_logs
-      @logs = SnoopLogg.log
-      ERB.new(File.read(File.join(File.dirname(__FILE__), 'server', 'index.erb'))).result(binding)
+    def all_entries
+      @entries = SnoopLogg.log
+      render :index
     end
     
-    def show_log(index)
-      @log = SnoopLogg.log[index]
-      ERB.new(File.read(File.join(File.dirname(__FILE__), 'server', 'show.erb'))).result(binding)
+    def show_entry(index)
+      @entries = SnoopLogg.log[index]
+      render :show
     end
+    
+    def show_entries_for_signature(sig)
+      @entries = SnoopLogg.log.select{ |(s, _, _)| s == sig }
+      render :index
+    end
+    
+    module Helpers
+      
+      def render(action, options = {})
+        options = {:layout => true}.merge(options)
+        if options.delete(:layout)
+          with_layout do
+            erb action
+          end
+        else
+          erb action
+        end
+      end
+      
+      def erb(template)
+        ERB.new(File.read(File.join(File.dirname(__FILE__), 'server', "#{template.to_s}.erb"))).result(binding)
+      end
+      def with_layout(layout = :application)
+        ERB.new(File.read(File.join(File.dirname(__FILE__), 'server', 'layouts', "#{layout.to_s}.erb"))).result(binding)
+      end
+      
+      def signature_link(sig)
+        <<-"end;"
+          <a href="/signatures/#{sig}" title="#{sig}">#{sig[0..8]}</a>
+        end;
+      end
+      
+      def format_for_display(data)
+        data.gsub!(/\\n/, "\n")
+        data.gsub!(/</, "&lt;")
+        data.gsub!(/>/, "&gt;")
+        data
+      end
+      
+    end
+    include Helpers
     
   end
 end
